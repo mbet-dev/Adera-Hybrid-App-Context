@@ -1,0 +1,1685 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Adera: Ethiopian Digital Ecosystem Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Crimson Text', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'earth': {
+                            50: '#faf8f3',
+                            100: '#f5f0e6',
+                            200: '#e8dcc7',
+                            300: '#d9c7a5',
+                            400: '#c8b084',
+                            500: '#b89b6a',
+                            600: '#a68b5e',
+                            700: '#8a7350',
+                            800: '#705d45',
+                            900: '#5c4d3a'
+                        },
+                        'slate-blue': {
+                            50: '#f4f6f8',
+                            100: '#e9edf1',
+                            200: '#c9d3dd',
+                            300: '#a8b8c9',
+                            400: '#6a84a0',
+                            500: '#2d5077',
+                            600: '#28486b',
+                            700: '#223c5a',
+                            800: '#1b3048',
+                            900: '#16273c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .toc-fixed {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 176, 132, 0.2);
+        }
+        .main-content {
+            margin-left: 320px;
+        }
+        @media (max-width: 1280px) {
+            .toc-fixed {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 1.5rem;
+            min-height: 60vh;
+        }
+        .hero-main {
+            grid-column: 1 / -1;
+            position: relative;
+            background: linear-gradient(135deg, rgba(45, 80, 119, 0.9), rgba(26, 39, 60, 0.95));
+            overflow: hidden;
+        }
+        .hero-accent-1 {
+            background: linear-gradient(45deg, rgba(184, 155, 106, 0.9), rgba(200, 176, 132, 0.8));
+        }
+        .hero-accent-2 {
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.8), rgba(38, 70, 83, 0.9));
+        }
+        
+/* Mermaid diagram styling */
+.mermaid-container {
+    display: flex;
+    justify-content: center;
+    min-height: 300px;
+    max-height: 800px;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.mermaid-container .mermaid {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    cursor: grab;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mermaid-container .mermaid svg {
+    max-width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.mermaid-container .mermaid:active {
+    cursor: grabbing;
+}
+
+.mermaid-container.zoomed .mermaid {
+    height: 100%;
+    width: 100%;
+    cursor: grab;
+}
+
+.mermaid-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mermaid-control-btn {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #374151;
+    font-size: 14px;
+    min-width: 36px;
+    height: 36px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-control-btn:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+.mermaid-control-btn:active {
+    transform: scale(0.95);
+}
+        
+        /* Override mermaid default styles for better contrast and unified styling */
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            stroke: #2d5077 !important;
+            stroke-width: 2px !important;
+            fill: #f4f6f8 !important;
+        }
+        
+        .mermaid .node .label {
+            color: #16273c !important;
+            font-weight: 500 !important;
+            font-size: 14px !important;
+        }
+        
+        .mermaid .edgePath .path {
+            stroke: #2d5077 !important;
+            stroke-width: 2px !important;
+        }
+        
+        .mermaid .edgeLabel {
+            background-color: #ffffff !important;
+            color: #16273c !important;
+            font-weight: 500 !important;
+            border: 1px solid #c9d3dd !important;
+            border-radius: 4px !important;
+            padding: 4px 8px !important;
+        }
+        
+        /* Enhanced styling for different node types with better contrast */
+        .mermaid .node.primary rect,
+        .mermaid .node.primary circle,
+        .mermaid .node.primary ellipse,
+        .mermaid .node.primary polygon {
+            fill: #2d5077 !important;
+            stroke: #16273c !important;
+        }
+        
+        .mermaid .node.primary .label {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        
+        .mermaid .node.secondary rect,
+        .mermaid .node.secondary circle,
+        .mermaid .node.secondary ellipse,
+        .mermaid .node.secondary polygon {
+            fill: #b89b6a !important;
+            stroke: #8a7350 !important;
+        }
+        
+        .mermaid .node.secondary .label {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        
+        .mermaid .node.success rect,
+        .mermaid .node.success circle,
+        .mermaid .node.success ellipse,
+        .mermaid .node.success polygon {
+            fill: #059669 !important;
+            stroke: #047857 !important;
+        }
+        
+        .mermaid .node.success .label {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Timeline specific styling */
+        .mermaid .section0 {
+            fill: #f4f6f8 !important;
+            stroke: #2d5077 !important;
+        }
+        
+        .mermaid .section1 {
+            fill: #e9edf1 !important;
+            stroke: #2d5077 !important;
+        }
+        
+        .mermaid .section2 {
+            fill: #c9d3dd !important;
+            stroke: #2d5077 !important;
+        }
+        
+        .mermaid .section3 {
+            fill: #a8b8c9 !important;
+            stroke: #2d5077 !important;
+        }
+        
+        .mermaid .cScale0 {
+            fill: #2d5077 !important;
+        }
+        
+        .mermaid .cScale1 {
+            fill: #b89b6a !important;
+        }
+        
+        .mermaid .cScale2 {
+            fill: #059669 !important;
+        }
+        
+        .mermaid .cScale3 {
+            fill: #dc2626 !important;
+        }
+        
+        /* Ensure text readability in all contexts */
+        .mermaid text {
+            fill: #16273c !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Ensure proper sizing */
+        @media (max-width: 1024px) {
+            .mermaid-container {
+                padding: 1rem;
+            }
+        }
+        
+        .citation-link {
+            color: #2d5077;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted #2d5077;
+        }
+        .citation-link:hover {
+            background-color: rgba(45, 80, 119, 0.1);
+        }
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+        }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed rounded-lg shadow-lg p-6">
+      <h3 class="text-lg font-semibold text-slate-blue-700 mb-4 font-serif">Contents</h3>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="#executive-summary" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Executive Summary</a>
+        </li>
+        <li>
+          <a href="#overview" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">System Overview</a>
+        </li>
+        <li>
+          <a href="#architecture" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Architecture</a>
+        </li>
+        <li>
+          <a href="#features" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Feature Breakdown</a>
+        </li>
+        <li>
+          <a href="#vibe-coding" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Vibe Coding Approach</a>
+        </li>
+        <li>
+          <a href="#implementation" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Technical Implementation</a>
+        </li>
+        <li>
+          <a href="#market-context" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Market Context</a>
+        </li>
+        <li>
+          <a href="#roadmap" class="text-slate-blue-600 hover:text-slate-blue-800 transition-colors">Future Roadmap</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Hero Section -->
+      <section class="mb-16">
+        <div class="hero-grid max-w-7xl mx-auto px-6">
+          <!-- Main Hero Card -->
+          <div class="hero-main rounded-2xl p-12 flex flex-col justify-center relative">
+            <div class="absolute inset-0 opacity-10">
+              <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/161b1c785c126b99cdd1cbc7e2897b5bc5dabea3.jpg" alt="Aerial view of Addis Ababa city" class="w-full h-full object-cover" size="wallpaper" aspect="wide" style="photo" query="Addis Ababa aerial view" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+            </div>
+            <div class="relative z-10">
+              <h1 class="text-5xl font-serif font-bold text-white mb-6 leading-tight">
+                <em class="italic">Adera</em>
+                <br/>
+                Ethiopian Digital Ecosystem
+              </h1>
+              <p class="text-xl text-blue-100 mb-8 max-w-2xl">
+                An integrated e-commerce and peer-to-peer delivery platform designed for Addis Ababa&#39;s emerging digital economy
+              </p>
+              <div class="flex items-center gap-4 text-sm text-blue-200">
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-mobile-alt"></i>
+                  React Native + Expo
+                </span>
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-database"></i>
+                  Supabase Backend
+                </span>
+                <span class="flex items-center gap-2">
+                  <i class="fas fa-map-marker-alt"></i>
+                  Addis Ababa Focus
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accent Cards -->
+          <div class="hero-accent-1 rounded-2xl p-8 flex items-center justify-center">
+            <div class="text-center">
+              <i class="fas fa-shopping-cart text-4xl text-white mb-4"></i>
+              <h3 class="text-xl font-semibold text-white mb-2">Adera Shop</h3>
+              <p class="text-yellow-100">Local Marketplace</p>
+            </div>
+          </div>
+
+          <div class="hero-accent-2 rounded-2xl p-8 flex items-center justify-center">
+            <div class="text-center">
+              <i class="fas fa-truck text-4xl text-white mb-4"></i>
+              <h3 class="text-xl font-semibold text-white mb-2">Adera Delivery</h3>
+              <p class="text-teal-100">PTP Logistics</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section id="executive-summary" class="mb-16">
+        <div class="max-w-4xl mx-auto px-6">
+          <div class="bg-white rounded-2xl shadow-lg p-8 border border-earth-200">
+            <h2 class="text-3xl font-serif font-bold text-slate-blue-800 mb-6">Executive Summary</h2>
+            <div class="prose prose-lg max-w-none">
+              <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                The Adera project presents an innovative dual-app strategy to establish a comprehensive digital ecosystem in Addis Ababa, Ethiopia. By integrating e-commerce and peer-to-peer (PTP) delivery services through two interconnected React Native applications, Adera addresses the classic &#34;chicken-and-egg&#34; problem faced by logistics startups while creating new opportunities for local businesses.
+              </p>
+
+              <div class="grid md:grid-cols-2 gap-8 my-8">
+                <div class="bg-slate-blue-50 p-6 rounded-xl">
+                  <h3 class="text-xl font-semibold text-slate-blue-800 mb-3">Strategic Innovation</h3>
+                  <p class="text-slate-blue-700">The hybrid model creates a self-reinforcing ecosystem where e-commerce generates demand for delivery services, while logistics capabilities enable e-commerce growth.</p>
+                </div>
+
+                <div class="bg-earth-50 p-6 rounded-xl">
+                  <h3 class="text-xl font-semibold text-earth-800 mb-3">Technical Approach</h3>
+                  <p class="text-earth-700">Built on React Native with Expo for cross-platform compatibility and Supabase for scalable backend services, enabling rapid development and deployment.</p>
+                </div>
+              </div>
+
+              <p class="text-gray-700 leading-relaxed">
+                This architecture leverages <a href="https://supabase.com/docs/guides/getting-started/architecture" class="citation-link">Supabase&#39;s open-source Backend-as-a-Service</a> to minimize development overhead while providing enterprise-grade features like real-time data synchronization, user authentication, and scalable database management. The phased approach allows for focused development and market testing before full integration.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Overview -->
+      <section id="overview" class="mb-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Adera System Overview</h2>
+
+          <!-- Core Concept -->
+          <div class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">The Dual-App Strategy</h3>
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                  <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/046ad47df48f0232e10a130fbb5fa98817e81b85.jpg" alt="Mobile apps connected to a central cloud server" class="w-full h-64 object-cover rounded-xl mb-6" size="medium" aspect="wide" query="mobile apps connected to cloud server" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+                  <p class="text-gray-700 leading-relaxed">
+                    The core innovation lies in creating a symbiotic relationship between e-commerce and logistics. Partner businesses act as both vendors and delivery points, while customers benefit from an integrated shopping and shipping experience.
+                  </p>
+                </div>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-slate-blue-500 pl-6">
+                    <h4 class="text-lg font-semibold text-slate-blue-800 mb-2">Adera Shop</h4>
+                    <p class="text-gray-600">Local marketplace where partner businesses list products and manage inventory, serving as the primary customer-facing interface for shopping.</p>
+                  </div>
+                  <div class="border-l-4 border-earth-500 pl-6">
+                    <h4 class="text-lg font-semibold text-earth-800 mb-2">Adera Delivery</h4>
+                    <p class="text-gray-600">Specialized logistics platform handling parcel creation, real-time tracking, and delivery management for both e-commerce orders and PTP shipments.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Context Diagram -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 mb-12">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">System Context</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TB
+                A[&#34;Customer&#34;] --&gt; D[&#34;Adera Ecosystem&#34;]
+                B[&#34;Partner Shop Owner&#34;] --&gt; D
+                C[&#34;Delivery Personnel&#34;] --&gt; D
+                D --&gt; E[&#34;Payment Gateway&#34;]
+                D --&gt; F[&#34;Maps &amp; Geolocation&#34;]
+                D --&gt; G[&#34;SMS Gateway&#34;]
+
+                subgraph &#34;Adera Ecosystem&#34;
+                H[&#34;Adera Shop App&#34;]
+                I[&#34;Adera Delivery App&#34;]
+                J[&#34;Supabase Backend&#34;]
+                end
+
+                H --&gt; J
+                I --&gt; J
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section id="architecture" class="mb-16 bg-gray-100 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">System Architecture</h2>
+
+          <!-- Container Diagram -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 mb-12">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Container Architecture</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph LR
+                subgraph &#34;Mobile Apps&#34;
+                A[&#34;Adera E-commerce
+                <br/>React Native + Expo&#34;]
+                B[&#34;Adera PTP Delivery
+                <br/>React Native + Expo&#34;]
+                end
+
+                subgraph &#34;Supabase Backend&#34;
+                C[&#34;PostgreSQL Database&#34;]
+                D[&#34;GoTrue Auth&#34;]
+                E[&#34;PostgREST API&#34;]
+                F[&#34;Realtime Service&#34;]
+                G[&#34;Edge Functions&#34;]
+                end
+
+                subgraph &#34;External Services&#34;
+                H[&#34;Payment Gateway&#34;]
+                I[&#34;Maps Service&#34;]
+                J[&#34;SMS Gateway&#34;]
+                end
+
+                A --&gt; E
+                B --&gt; E
+                A --&gt; F
+                B --&gt; F
+                E --&gt; C
+                F --&gt; C
+                A --&gt; H
+                B --&gt; I
+                G --&gt; J
+              </div>
+            </div>
+          </div>
+
+          <!-- Supabase Integration -->
+          <div class="grid lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="text-slate-blue-600 text-3xl mb-4">
+                <i class="fas fa-users"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-slate-blue-800 mb-3">Unified Authentication</h3>
+              <p class="text-gray-600">Single sign-on across both applications with role-based access control for customers, shop owners, and delivery personnel.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="text-earth-600 text-3xl mb-4">
+                <i class="fas fa-database"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-earth-800 mb-3">Centralized Database</h3>
+              <p class="text-gray-600">PostgreSQL database storing user profiles, products, orders, and parcel tracking data with real-time synchronization.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="text-green-600 text-3xl mb-4">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-green-800 mb-3">Real-time Updates</h3>
+              <p class="text-gray-600">WebSocket-based real-time updates for parcel tracking, order status changes, and inventory management.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature Breakdown -->
+      <section id="features" class="mb-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Feature Breakdown</h2>
+
+          <!-- Adera Shop Features -->
+          <div class="mb-16">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-slate-blue-100 p-4 rounded-full">
+                  <i class="fas fa-shopping-cart text-slate-blue-600 text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-serif font-bold text-slate-blue-800">Adera Shop Features</h3>
+                  <p class="text-slate-blue-600">Comprehensive e-commerce platform for customers and partner shops</p>
+                </div>
+              </div>
+
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                  <h4 class="text-xl font-semibold text-slate-blue-700 mb-4">Customer Experience</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Rich product catalog with search and filtering</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Persistent shopping cart across devices</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Secure checkout with multiple payment options</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Real-time order tracking and notifications</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="text-xl font-semibold text-earth-700 mb-4">Partner Shop Tools</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Vendor portal with inventory management</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Product upload and catalog management</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Order processing and fulfillment tracking</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Sales analytics and performance insights</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Adera Delivery Features -->
+          <div class="mb-16">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-earth-100 p-4 rounded-full">
+                  <i class="fas fa-truck text-earth-600 text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-serif font-bold text-earth-800">Adera Delivery Features</h3>
+                  <p class="text-earth-600">Reliable logistics platform for customers and delivery personnel</p>
+                </div>
+              </div>
+
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                  <h4 class="text-xl font-semibold text-slate-blue-700 mb-4">Customer Tools</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Intuitive parcel creation interface</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Address validation and geocoding</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Real-time tracking with map integration</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Delivery history and rebooking</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="text-xl font-semibold text-earth-700 mb-4">Delivery Personnel Tools</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Job board with available deliveries</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Route optimization and navigation</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Status updates and proof of delivery</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                      <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                      <span class="text-gray-700">Earnings tracking and performance metrics</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Flow Diagram -->
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Integration Data Flow</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph LR
+                A[&#34;Customer Places Order&#34;] --&gt; B[&#34;Order Created in Supabase&#34;]
+                B --&gt; C[&#34;Delivery Request Generated&#34;]
+                C --&gt; D[&#34;Delivery Personnel Accepts Job&#34;]
+                D --&gt; E[&#34;Real-time Status Updates&#34;]
+                E --&gt; F[&#34;Customer Tracks Delivery&#34;]
+                F --&gt; G[&#34;Delivery Completed&#34;]
+                G --&gt; H[&#34;Order Status Updated&#34;]
+                H --&gt; I[&#34;Customer Receives Notification&#34;]
+
+                subgraph &#34;Supabase Backend&#34;
+                B
+                C
+                E
+                H
+                end
+
+                subgraph &#34;Adera Shop&#34;
+                A
+                F
+                I
+                end
+
+                subgraph &#34;Adera Delivery&#34;
+                D
+                G
+                end
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Vibe Coding Approach -->
+      <section id="vibe-coding" class="mb-16 bg-slate-blue-50 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Vibe Coding Development Strategy</h2>
+
+          <div class="grid lg:grid-cols-2 gap-12 mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">What is Vibe Coding?</h3>
+              <p class="text-gray-700 leading-relaxed mb-4">
+                Vibe Coding transforms the development process from a solitary, syntax-heavy task into a collaborative, high-level conceptual exercise. The developer&#39;s role evolves from code writer to system architect, guiding AI to produce desired outcomes through <a href="https://arxiv.org/html/2505.19443v1" class="citation-link">conversational interaction</a>.
+              </p>
+              <div class="bg-slate-blue-50 p-4 rounded-lg">
+                <p class="text-slate-blue-700 font-medium">
+                  &#34;A continuous loop of prompting, reviewing, and refining that feels more like a dialogue between the developer&#39;s vision and the AI&#39;s execution capabilities.&#34;
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-earth-700 mb-6">Project Benefits</h3>
+              <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-rocket text-earth-500 mt-1"></i>
+                  <div>
+                    <h4 class="font-semibold text-earth-800">Rapid Prototyping</h4>
+                    <p class="text-gray-600">Reduce development time from weeks to hours for core features</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-brain text-earth-500 mt-1"></i>
+                  <div>
+                    <h4 class="font-semibold text-earth-800">AI-Powered Debugging</h4>
+                    <p class="text-gray-600">Simplify error resolution and complex problem-solving</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-code text-earth-500 mt-1"></i>
+                  <div>
+                    <h4 class="font-semibold text-earth-800">Boilerplate Generation</h4>
+                    <p class="text-gray-600">Automate repetitive coding tasks and project setup</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tools and Workflow -->
+          <div class="grid lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h4 class="text-xl font-semibold text-slate-blue-800 mb-4">Primary IDE</h4>
+              <div class="flex items-center gap-3 mb-3">
+                <i class="fab fa-github text-2xl"></i>
+                <span class="font-semibold">Cursor IDE</span>
+              </div>
+              <p class="text-gray-600 text-sm">AI-first development environment designed for fluid collaboration and rapid iteration</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h4 class="text-xl font-semibold text-earth-800 mb-4">AI Assistants</h4>
+              <div class="space-y-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <i class="fab fa-microsoft text-blue-600"></i>
+                  <span class="text-sm">GitHub Copilot</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-robot text-green-600"></i>
+                  <span class="text-sm">Claude AI</span>
+                </div>
+              </div>
+              <p class="text-gray-600 text-sm">Multiple AI models for code generation, debugging, and technical guidance</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h4 class="text-xl font-semibold text-green-800 mb-4">Workflow</h4>
+              <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                <li>Define requirements with AI</li>
+                <li>Generate initial code</li>
+                <li>Test and refine iteratively</li>
+                <li>Deploy and gather feedback</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Implementation -->
+      <section id="implementation" class="mb-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Technical Implementation Guide</h2>
+
+          <!-- Frontend Development -->
+          <div class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Frontend Development with React Native &amp; Expo</h3>
+
+              <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <h4 class="text-xl font-semibold text-slate-blue-800 mb-4">Monorepo Structure</h4>
+                  <div class="bg-gray-50 p-4 rounded-lg font-mono text-sm">
+                    <pre>ad-era-monorepo/
+├── apps/
+│   ├── adera-ecommerce/
+│   └── adera-delivery/
+├── packages/
+│   ├── shared-ui/
+│   ├── shared-utils/
+│   └── shared-types/
+└── package.json</pre>
+                  </div>
+                  <p class="text-gray-600 mt-4">Using Nx or Turborepo for efficient code sharing between applications.</p>
+                </div>
+
+                <div>
+                  <h4 class="text-xl font-semibold text-earth-800 mb-4">Shared Components</h4>
+                  <ul class="space-y-2 text-gray-700">
+                    <li class="flex items-center gap-2">
+                      <i class="fas fa-check text-green-500"></i>
+                      <span>Authentication flows</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fas fa-check text-green-500"></i>
+                      <span>UI components (buttons, inputs)</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fas fa-check text-green-500"></i>
+                      <span>Navigation patterns</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fas fa-check text-green-500"></i>
+                      <span>State management utilities</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="bg-slate-blue-50 p-6 rounded-xl">
+                <h4 class="text-lg font-semibold text-slate-blue-800 mb-3">State Management Strategy</h4>
+                <p class="text-slate-blue-700">
+                  Utilize <strong>Zustand</strong> for lightweight state management or <strong>Redux Toolkit</strong> for complex data flows. Implement shared state patterns for user authentication and profile data to ensure consistency across both applications.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Backend Development -->
+          <div class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-earth-700 mb-6">Backend Development with Supabase</h3>
+
+              <div class="grid lg:grid-cols-3 gap-6">
+                <div class="border border-earth-200 p-6 rounded-xl">
+                  <h4 class="text-lg font-semibold text-earth-800 mb-3">Database Schema</h4>
+                  <p class="text-gray-600 text-sm mb-4">PostgreSQL database designed for scalability and real-time operations</p>
+                  <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• Users &amp; authentication</li>
+                    <li>• Products &amp; inventory</li>
+                    <li>• Orders &amp; delivery tracking</li>
+                    <li>• Partner shop profiles</li>
+                  </ul>
+                </div>
+
+                <div class="border border-earth-200 p-6 rounded-xl">
+                  <h4 class="text-lg font-semibold text-earth-800 mb-3">Row-Level Security</h4>
+                  <p class="text-gray-600 text-sm mb-4">Fine-grained access control for data security and privacy</p>
+                  <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• Role-based permissions</li>
+                    <li>• Data ownership rules</li>
+                    <li>• Secure API endpoints</li>
+                    <li>• Audit logging</li>
+                  </ul>
+                </div>
+
+                <div class="border border-earth-200 p-6 rounded-xl">
+                  <h4 class="text-lg font-semibold text-earth-800 mb-3">Edge Functions</h4>
+                  <p class="text-gray-600 text-sm mb-4">Serverless functions for custom business logic</p>
+                  <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• Payment processing</li>
+                    <li>• Notification systems</li>
+                    <li>• Delivery cost calculations</li>
+                    <li>• Third-party integrations</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Integrations -->
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Key Feature Integrations</h3>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+              <div class="flex items-start gap-4">
+                <div class="bg-blue-100 p-3 rounded-full">
+                  <i class="fas fa-map-marked-alt text-blue-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-blue-800 mb-2">Maps &amp; Geolocation</h4>
+                  <p class="text-gray-600 text-sm">Google Maps or Mapbox integration for real-time tracking and route optimization</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="bg-green-100 p-3 rounded-full">
+                  <i class="fas fa-credit-card text-green-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-blue-800 mb-2">Payment Gateway</h4>
+                  <p class="text-gray-600 text-sm">Secure payment processing with support for local Ethiopian payment methods</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="bg-purple-100 p-3 rounded-full">
+                  <i class="fas fa-bell text-purple-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-blue-800 mb-2">Push Notifications</h4>
+                  <p class="text-gray-600 text-sm">Firebase Cloud Messaging for real-time order and delivery updates</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Market Context -->
+      <section id="market-context" class="mb-16 bg-gray-100 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Market Context &amp; Strategic Considerations</h2>
+
+          <!-- Ethiopian Market Landscape -->
+          <div class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">The Ethiopian Market Landscape</h3>
+
+              <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <img src="https://kimi-web-img.moonshot.cn/img/images.pexels.com/559ca0d51a1b5ad46d132ba9d98a035a78fe3f6c.jpeg" alt="Busy market street in Addis Ababa with technology users" class="w-full h-64 object-cover rounded-xl mb-6" size="medium" aspect="wide" style="photo" query="Addis Ababa market street technology users" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+                  <p class="text-gray-700 leading-relaxed">
+                    The e-commerce and logistics landscape in Addis Ababa is in early development stages, with growing demand from a young, tech-savvy population. However, challenges include infrastructure limitations and trust barriers that Adera&#39;s hybrid model directly addresses.
+                  </p>
+                </div>
+
+                <div class="space-y-6">
+                  <div class="bg-slate-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-blue-800 mb-2">Market Opportunities</h4>
+                    <ul class="text-sm text-slate-blue-700 space-y-1">
+                      <li>• Growing smartphone adoption</li>
+                      <li>• Young, digitally-native population</li>
+                      <li>• Limited competition in integrated solutions</li>
+                      <li>• Government digital transformation initiatives</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-earth-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-earth-800 mb-2">Key Challenges</h4>
+                    <ul class="text-sm text-earth-700 space-y-1">
+                      <li>• High data costs</li>
+                      <li>• Infrastructure reliability</li>
+                      <li>• Consumer trust in online transactions</li>
+                      <li>• Last-mile delivery complexity</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-r from-slate-blue-50 to-earth-50 p-6 rounded-xl">
+                <h4 class="text-lg font-semibold text-slate-blue-800 mb-3">The Adera Differentiator</h4>
+                <p class="text-gray-700">
+                  By combining e-commerce and logistics, Adera creates a self-reinforcing ecosystem that generates its own demand while solving critical infrastructure challenges through partner shop networks and data-efficient design.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lessons from African Markets -->
+          <div class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-earth-700 mb-6">Lessons from African E-commerce &amp; Delivery</h3>
+
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                  <h4 class="text-xl font-semibold text-slate-blue-800 mb-4">South African Market Dynamics</h4>
+                  <p class="text-gray-700 mb-4">
+                    <a href="https://saiia.org.za/wp-content/uploads/2017/08/GA_Th3_DP_Budhree_20170901.pdf" class="citation-link">Research on South African online retailing</a> highlights critical success factors:
+                  </p>
+                  <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-shield-alt text-slate-blue-500 mt-1"></i>
+                      <span>Robust logistics infrastructure using pickup points</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-mobile-alt text-slate-blue-500 mt-1"></i>
+                      <span>Data-efficient mobile applications</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-star text-slate-blue-500 mt-1"></i>
+                      <span>Consumer trust through reviews and ratings</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="text-xl font-semibold text-earth-800 mb-4">Jumia&#39;s Logistics Model</h4>
+                  <p class="text-gray-700 mb-4">
+                    <a href="https://www.gsma.com/mobilefordevelopment/wp-content/uploads/2023/10/E-CommerceInAfrica_R_WebSingles.pdf" class="citation-link">GSMA research on African e-commerce</a> reveals Jumia&#39;s hybrid strategy:
+                  </p>
+                  <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-network-wired text-earth-500 mt-1"></i>
+                      <span>Combination of owned and third-party logistics</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-route text-earth-500 mt-1"></i>
+                      <span>Technology-driven route optimization</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i class="fas fa-handshake text-earth-500 mt-1"></i>
+                      <span>Integration of informal logistics providers</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Infrastructure and Trust -->
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Addressing Infrastructure and Trust Challenges</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-xl font-semibold text-slate-blue-800 mb-4">Technical Resilience</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <div class="bg-blue-100 p-2 rounded-full">
+                      <i class="fas fa-cloud text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h5 class="font-semibold text-gray-800">Cloud-Based Reliability</h5>
+                      <p class="text-gray-600 text-sm">Supabase provides high availability despite local power and internet disruptions</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="bg-green-100 p-2 rounded-full">
+                      <i class="fas fa-compress text-green-600"></i>
+                    </div>
+                    <div>
+                      <h5 class="font-semibold text-gray-800">Data Optimization</h5>
+                      <p class="text-gray-600 text-sm">Compressed images, efficient data formats, and offline capabilities</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="text-xl font-semibold text-earth-800 mb-4">Building Trust</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <div class="bg-purple-100 p-2 rounded-full">
+                      <i class="fas fa-lock text-purple-600"></i>
+                    </div>
+                    <div>
+                      <h5 class="font-semibold text-gray-800">Secure Payments</h5>
+                      <p class="text-gray-600 text-sm">Local payment methods with international security standards</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="bg-orange-100 p-2 rounded-full">
+                      <i class="fas fa-eye text-orange-600"></i>
+                    </div>
+                    <div>
+                      <h5 class="font-semibold text-gray-800">Transparency</h5>
+                      <p class="text-gray-600 text-sm">Real-time tracking and public feedback systems</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Future Roadmap -->
+      <section id="roadmap" class="mb-16">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl font-serif font-bold text-center text-slate-blue-800 mb-12">Possible Future Roadmap: From Two Apps to One</h2>
+
+          <!-- Timeline -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 mb-12">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-8">Development Timeline</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                timeline
+                title &#34;Adera Development Roadmap&#34;
+
+                Phase 1 : &#34;Core MVP Development&#34;
+                : &#34;Adera Shop MVP&#34;
+                : &#34;Adera Delivery MVP&#34;
+                : &#34;Supabase Setup&#34;
+
+                Phase 2 : &#34;Market Testing&#34;
+                : &#34;Limited Beta Launch&#34;
+                : &#34;User Feedback Collection&#34;
+                : &#34;Performance Optimization&#34;
+
+                Phase 3 : &#34;Feature Enhancement&#34;
+                : &#34;Advanced Analytics&#34;
+                : &#34;Payment Integration&#34;
+                : &#34;Map Services&#34;
+
+                Phase 4 : &#34;Market Expansion&#34;
+                : &#34;Full Launch in Addis&#34;
+                : &#34;Partner Network Growth&#34;
+                : &#34;User Acquisition&#34;
+
+                Phase 5 : &#34;Unification&#34;
+                : &#34;Codebase Merging&#34;
+                : &#34;Unified User Experience&#34;
+                : &#34;Scale to Other Cities&#34;
+              </div>
+            </div>
+          </div>
+
+          <!-- Unification Strategy -->
+          <div class="grid lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-slate-blue-700 mb-6">Merging Strategy</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-slate-blue-500 pl-4">
+                  <h4 class="font-semibold text-slate-blue-800">Phase 1: Foundation</h4>
+                  <p class="text-gray-600 text-sm">Shared component library and monorepo structure enable seamless code sharing</p>
+                </div>
+                <div class="border-l-4 border-earth-500 pl-4">
+                  <h4 class="font-semibold text-earth-800">Phase 2: Integration</h4>
+                  <p class="text-gray-600 text-sm">Gradual feature integration with shared authentication and user profiles</p>
+                </div>
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h4 class="font-semibold text-green-800">Phase 3: Unification</h4>
+                  <p class="text-gray-600 text-sm">Single codebase with unified navigation and consistent user experience</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+              <h3 class="text-2xl font-serif font-bold text-earth-700 mb-6">Scaling Beyond Addis</h3>
+              <img src="https://kimi-web-img.moonshot.cn/img/media.cntraveler.com/86841e27bafe6bd82d1f5b519e433b7fb08b7318.jpg" alt="Urban landscape of an Ethiopian city" class="w-full h-40 object-cover rounded-xl mb-6" size="medium" aspect="wide" style="photo" query="Ethiopian city urban landscape" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-map-marked-alt text-earth-500 mt-1"></i>
+                  <span>Replicate successful Addis Ababa model in major regional cities</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-users text-earth-500 mt-1"></i>
+                  <span>Expand partner shop network through local business partnerships</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fas fa-cogs text-earth-500 mt-1"></i>
+                  <span>Adapt platform to local market conditions and user preferences</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Key Success Metrics -->
+          <div class="mt-12 bg-gradient-to-r from-slate-blue-50 to-earth-50 rounded-2xl p-8">
+            <h3 class="text-2xl font-serif font-bold text-slate-blue-800 mb-6 text-center">Key Success Metrics</h3>
+            <div class="grid md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="bg-slate-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-users text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-slate-blue-800">Active Users</h4>
+                <p class="text-gray-600 text-sm">2,000+ in first year</p>
+              </div>
+              <div class="text-center">
+                <div class="bg-earth-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-store text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-earth-800">Partner Shops</h4>
+                <p class="text-gray-600 text-sm">200+ in Addis Ababa</p>
+              </div>
+              <div class="text-center">
+                <div class="bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-chart-line text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-green-800">Monthly Orders</h4>
+                <p class="text-gray-600 text-sm">2,000+ transactions</p>
+              </div>
+              <div class="text-center">
+                <div class="bg-purple-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-star text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-purple-800">User Satisfaction</h4>
+                <p class="text-gray-600 text-sm">4.5+ app rating</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-slate-blue-900 text-white py-12">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+          <h3 class="text-2xl font-serif font-bold mb-4">Adera: Building Ethiopia&#39;s Digital Future</h3>
+          <p class="text-slate-blue-200 mb-6">
+            An innovative approach to integrated e-commerce and logistics, designed specifically for the Ethiopian market&#39;s unique opportunities and challenges.
+          </p>
+
+          <div class="flex justify-center gap-8 text-sm text-slate-blue-300">
+            <span class="flex items-center gap-2">
+              <i class="fas fa-code"></i>
+              React Native + Expo
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-database"></i>
+              Supabase Backend
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-map-marker-alt"></i>
+              Addis Ababa Focus
+            </span>
+          </div>
+        </div>
+
+      </footer>
+      <div class="max-w-4xl mx-auto px-6 text-center">
+           <p>
+            MBet©2025 -
+           </p>
+           <p><a href="mailto:mbet.michal@gmail.com">  Michal Rusnak </a></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid with custom theme and styling
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors with high contrast
+                primaryColor: '#f4f6f8',
+                primaryTextColor: '#16273c',
+                primaryBorderColor: '#2d5077',
+                
+                // Secondary colors with good contrast
+                secondaryColor: '#e9edf1',
+                secondaryTextColor: '#16273c',
+                secondaryBorderColor: '#28486b',
+                
+                // Tertiary colors
+                tertiaryColor: '#c9d3dd',
+                tertiaryTextColor: '#16273c',
+                tertiaryBorderColor: '#223c5a',
+                
+                // Additional colors for better contrast
+                primaryColorLight: '#ffffff',
+                primaryColorDark: '#1b3048',
+                
+                // Background colors
+                background: '#ffffff',
+                mainBkg: '#f4f6f8',
+                secondBkg: '#e9edf1',
+                tertiaryBkg: '#c9d3dd',
+                
+                // Line and edge colors
+                lineColor: '#2d5077',
+                edgeLabelBackground: '#ffffff',
+                
+                // Text colors for different contexts
+                textColor: '#16273c',
+                darkTextColor: '#16273c',
+                lightTextColor: '#16273c',
+                
+                // Node specific colors with high contrast
+                nodeBkg: '#f4f6f8',
+                nodeTextColor: '#16273c',
+                nodeBorder: '#2d5077',
+                
+                // Special node types
+                primaryBorderColor: '#2d5077',
+                primaryTextColor: '#16273c',
+                
+                // Timeline colors
+                cScale0: '#2d5077',
+                cScale1: '#b89b6a',
+                cScale2: '#059669',
+                cScale3: '#dc2626'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            },
+            timeline: {
+                useMaxWidth: false,
+                padding: 20
+            },
+            gantt: {
+                useMaxWidth: false,
+                padding: 20
+            }
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize controls after mermaid renders
+        setTimeout(() => {
+            initializeMermaidControls();
+        }, 1500);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add active state to TOC links based on scroll position
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                const id = section.getAttribute('id');
+                const link = document.querySelector(`.toc-fixed a[href="#${id}"]`);
+
+                if (scrollPos >= top && scrollPos < bottom) {
+                    document.querySelectorAll('.toc-fixed a').forEach(a => a.classList.remove('font-semibold', 'text-slate-blue-800'));
+                    if (link) {
+                        link.classList.add('font-semibold', 'text-slate-blue-800');
+                    }
+                }
+            });
+        });
+    </script>
+  
+
+</body></html>

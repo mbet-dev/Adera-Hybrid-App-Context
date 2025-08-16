@@ -1,0 +1,46 @@
+/* This file contains the CSS styles for the application. It enhances the visual appearance of the HTML elements, ensuring responsiveness and a cohesive design using Tailwind CSS utilities and custom styles. */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafb; /* Light background for better contrast */
+    color: #374151; /* Dark text color for readability */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Crimson Text', serif;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.btn {
+    @apply bg-earth-500 text-white font-bold py-2 px-4 rounded;
+}
+
+.btn:hover {
+    @apply bg-earth-600;
+}
+
+.card {
+    @apply bg-white shadow-md rounded-lg p-4;
+}
+
+.card-title {
+    @apply text-xl font-semibold mb-2;
+}
+
+.card-content {
+    @apply text-gray-700;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem;
+    }
+}
